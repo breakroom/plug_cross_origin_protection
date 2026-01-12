@@ -1,4 +1,4 @@
-defmodule Plug.CrossOriginProtection do
+defmodule PlugCrossOriginProtection do
   @moduledoc """
   Plug to protect from cross-site request forgery (CSRF) using header-based
   checks.
@@ -28,12 +28,12 @@ defmodule Plug.CrossOriginProtection do
       "https://partner.example.com:8443"]`
 
     * `:with` - should be one of `:exception` or `:forbidden`. Defaults to `:forbidden`.
-      * `:exception` - raises `Plug.CrossOriginProtection.InvalidCrossOriginRequestError`
+      * `:exception` - raises `PlugCrossOriginProtection.InvalidCrossOriginRequestError`
       * `:forbidden` - returns a 403 Forbidden response
 
   ## Disabling
 
-  You may disable this plug by calling `Plug.CrossOriginProtection.skip/1` on
+  You may disable this plug by calling `PlugCrossOriginProtection.skip/1` on
   the `Plug.Conn`, or by setting
   `Plug.Conn.put_private(conn, :plug_skip_cross_origin_protection, true)`.
 
@@ -46,14 +46,14 @@ defmodule Plug.CrossOriginProtection do
   ## Examples
 
       # Basic usage
-      plug Plug.CrossOriginProtection
+      plug PlugCrossOriginProtection
 
       # With trusted origins
-      plug Plug.CrossOriginProtection,
+      plug PlugCrossOriginProtection,
         trusted_origins: ["https://sso.example.com"]
 
       # Raise exception instead of 403
-      plug Plug.CrossOriginProtection, with: :exception
+      plug PlugCrossOriginProtection, with: :exception
 
   ## Security Considerations
 
@@ -98,7 +98,7 @@ defmodule Plug.CrossOriginProtection do
 
       def call(conn, _opts) do
         conn
-        |> Plug.CrossOriginProtection.skip()
+        |> PlugCrossOriginProtection.skip()
         |> MyApp.Router.call([])
       end
 

@@ -1,4 +1,4 @@
-defmodule Plug.CrossOriginProtection.MixProject do
+defmodule PlugCrossOriginProtection.MixProject do
   use Mix.Project
 
   @version "0.1.0"
@@ -14,7 +14,7 @@ defmodule Plug.CrossOriginProtection.MixProject do
       description: description(),
       package: package(),
       docs: docs(),
-      name: "Plug.CrossOriginProtection",
+      name: "PlugCrossOriginProtection",
       source_url: @source_url
     ]
   end
@@ -52,7 +52,7 @@ defmodule Plug.CrossOriginProtection.MixProject do
 
   defp docs do
     [
-      main: "Plug.CrossOriginProtection",
+      main: "PlugCrossOriginProtection",
       source_ref: "v#{@version}",
       source_url: @source_url,
       extras: ["README.md", "LICENSE"]

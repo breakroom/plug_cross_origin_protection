@@ -1,4 +1,4 @@
-# Plug.CrossOriginProtection
+# PlugCrossOriginProtection
 
 [![Hex.pm](https://img.shields.io/hexpm/v/plug_cross_origin_protection.svg)](https://hex.pm/packages/plug_cross_origin_protection)
 [![Docs](https://img.shields.io/badge/hex-docs-blue.svg)](https://hexdocs.pm/plug_cross_origin_protection)
@@ -41,7 +41,7 @@ end
 
 ```elixir
 # In your Phoenix endpoint or router
-plug Plug.CrossOriginProtection
+plug PlugCrossOriginProtection
 ```
 
 ### With trusted origins
@@ -49,7 +49,7 @@ plug Plug.CrossOriginProtection
 For SSO callbacks or partner integrations:
 
 ```elixir
-plug Plug.CrossOriginProtection,
+plug PlugCrossOriginProtection,
   trusted_origins: [
     "https://sso.example.com",
     "https://partner.example.com"
@@ -61,7 +61,7 @@ plug Plug.CrossOriginProtection,
 Raise an exception instead of returning 403 Forbidden:
 
 ```elixir
-plug Plug.CrossOriginProtection, with: :exception
+plug PlugCrossOriginProtection, with: :exception
 ```
 
 ### Skipping protection for specific routes
@@ -76,7 +76,7 @@ defmodule MyApp.WebhookController do
   plug :skip_csrf when action in [:receive]
 
   defp skip_csrf(conn, _opts) do
-    Plug.CrossOriginProtection.skip(conn)
+    PlugCrossOriginProtection.skip(conn)
   end
 
   def receive(conn, params) do
