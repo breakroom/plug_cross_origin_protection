@@ -39,9 +39,14 @@ end
 
 ### Basic usage
 
-```elixir
-# In your Phoenix endpoint or router
-plug PlugCrossOriginProtection
+If you're using Phoenix, `PlugCrossOriginProtection` is a direct replacement for
+the `protect_from_forgery` helper which invokes
+[`Plug.CSRFProtection`](https://hexdocs.pm/plug/Plug.CSRFProtection.html).
+
+```diff
+# In your YourAppWeb.Router
+- plug :protect_from_forgery
++ plug PlugCrossOriginProtection
 ```
 
 ### With trusted origins
@@ -54,41 +59,6 @@ plug PlugCrossOriginProtection,
     "https://sso.example.com",
     "https://partner.example.com"
   ]
-```
-
-### Exception mode
-
-Raise an exception instead of returning 403 Forbidden:
-
-```elixir
-plug PlugCrossOriginProtection, with: :exception
-```
-
-### Skipping protection for specific routes
-
-For webhooks or public API endpoints:
-
-```elixir
-# In a controller
-defmodule MyApp.WebhookController do
-  use MyApp, :controller
-
-  plug :skip_csrf when action in [:receive]
-
-  defp skip_csrf(conn, _opts) do
-    PlugCrossOriginProtection.skip(conn)
-  end
-
-  def receive(conn, params) do
-    # Handle webhook...
-  end
-end
-```
-
-Or using `put_private` directly:
-
-```elixir
-Plug.Conn.put_private(conn, :plug_skip_cross_origin_protection, true)
 ```
 
 ## Security considerations
