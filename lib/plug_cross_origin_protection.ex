@@ -33,8 +33,7 @@ defmodule PlugCrossOriginProtection do
 
   ## Disabling
 
-  You may disable this plug by calling `PlugCrossOriginProtection.skip/1` on
-  the `Plug.Conn`, or by setting
+  You may disable this plug by setting
   `Plug.Conn.put_private(conn, :plug_skip_cross_origin_protection, true)`.
 
   This is useful for:
@@ -84,27 +83,6 @@ defmodule PlugCrossOriginProtection do
     """
 
     defexception message: "cross-origin request detected", plug_status: 403
-  end
-
-  @doc """
-  Marks the connection to skip cross-origin protection checks.
-
-  This should be used sparingly for legitimate cross-origin endpoints like:
-    * SSO/OAuth callbacks
-    * Webhook endpoints
-    * Public API endpoints
-
-  ## Example
-
-      def call(conn, _opts) do
-        conn
-        |> PlugCrossOriginProtection.skip()
-        |> MyApp.Router.call([])
-      end
-
-  """
-  def skip(conn) do
-    put_private(conn, :plug_skip_cross_origin_protection, true)
   end
 
   # Plug callbacks

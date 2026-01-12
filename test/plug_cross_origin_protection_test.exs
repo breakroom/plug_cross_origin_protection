@@ -191,21 +191,6 @@ defmodule PlugCrossOriginProtectionTest do
 
       refute conn.halted
     end
-
-    test "skip/1 helper sets the private flag" do
-      conn = conn(:post, "/") |> PlugCrossOriginProtection.skip()
-      assert conn.private[:plug_skip_cross_origin_protection] == true
-    end
-
-    test "skip/1 allows subsequent cross-origin requests" do
-      conn =
-        conn(:post, "/")
-        |> put_req_header("sec-fetch-site", "cross-site")
-        |> PlugCrossOriginProtection.skip()
-        |> PlugCrossOriginProtection.call(@opts)
-
-      refute conn.halted
-    end
   end
 
   describe "exception mode" do
