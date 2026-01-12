@@ -30,7 +30,7 @@ Add `plug_cross_origin_protection` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:plug_cross_origin_protection, "~> 0.1.0"}
+    {:plug_cross_origin_protection, "~> 0.2"}
   ]
 end
 ```
