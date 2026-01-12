@@ -27,7 +27,7 @@ defmodule PlugCrossOriginProtection do
       `"scheme://host:port"`.  Example: `["https://sso.example.com",
       "https://partner.example.com:8443"]`
 
-    * `:with` - should be one of `:exception` or `:forbidden`. Defaults to `:forbidden`.
+    * `:with` - should be one of `:exception` or `:forbidden`. Defaults to `:exception`.
       * `:exception` - raises `PlugCrossOriginProtection.InvalidCrossOriginRequestError`
       * `:forbidden` - returns a 403 Forbidden response
 
@@ -117,7 +117,7 @@ defmodule PlugCrossOriginProtection do
       |> validate_origins!()
       |> MapSet.new()
 
-    mode = Keyword.get(opts, :with, :forbidden)
+    mode = Keyword.get(opts, :with, :exception)
 
     unless mode in [:exception, :forbidden] do
       raise ArgumentError,

@@ -58,24 +58,19 @@ defmodule PlugCrossOriginProtectionTest do
     end
 
     test "rejects cross-site requests" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, "cross-origin request detected", fn ->
         conn(:post, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
-      assert conn.status == 403
-      assert conn.resp_body == "cross-origin request detected"
+      end
     end
 
     test "rejects same-site (cross-origin) requests" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:post, "/")
         |> put_req_header("sec-fetch-site", "same-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
-      assert conn.status == 403
+      end
     end
   end
 
@@ -111,25 +106,21 @@ defmodule PlugCrossOriginProtectionTest do
     end
 
     test "rejects when Origin host doesn't match Host" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:post, "/")
         |> with_host("example.com")
         |> put_req_header("origin", "https://attacker.com")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
-      assert conn.status == 403
+      end
     end
 
     test "rejects when ports don't match" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:post, "/")
         |> with_host("example.com")
         |> put_req_header("origin", "https://example.com:8443")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
-      assert conn.status == 403
+      end
     end
 
     test "allows requests with no Origin or Sec-Fetch-Site (non-browser)" do
@@ -181,14 +172,12 @@ defmodule PlugCrossOriginProtectionTest do
     end
 
     test "rejects untrusted origins" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:post, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> put_req_header("origin", "https://untrusted.example.com")
         |> PlugCrossOriginProtection.call(@opts_with_trusted)
-
-      assert conn.halted
-      assert conn.status == 403
+      end
     end
   end
 
@@ -238,7 +227,7 @@ defmodule PlugCrossOriginProtectionTest do
 
   describe "init/1 validation" do
     test "accepts empty options" do
-      assert {%MapSet{}, :forbidden} = PlugCrossOriginProtection.init([])
+      assert {%MapSet{}, :exception} = PlugCrossOriginProtection.init([])
     end
 
     test "validates origin scheme" do
@@ -309,39 +298,35 @@ defmodule PlugCrossOriginProtectionTest do
 
   describe "HTTP methods" do
     test "rejects POST with cross-site header" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:post, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
+      end
     end
 
     test "rejects PUT with cross-site header" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:put, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
+      end
     end
 
     test "rejects PATCH with cross-site header" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:patch, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
+      end
     end
 
     test "rejects DELETE with cross-site header" do
-      conn =
+      assert_raise InvalidCrossOriginRequestError, fn ->
         conn(:delete, "/")
         |> put_req_header("sec-fetch-site", "cross-site")
         |> PlugCrossOriginProtection.call(@opts)
-
-      assert conn.halted
+      end
     end
   end
 end
